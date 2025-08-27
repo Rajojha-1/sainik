@@ -6,7 +6,7 @@ bp = Blueprint("main", __name__)
 
 
 @bp.route("/")
-def home():
+def welfare_home():
     return render_template("home.html")
 
 

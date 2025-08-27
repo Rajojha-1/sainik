@@ -22,11 +22,12 @@ def create_app() -> Flask:
     from .schemes import bp as schemes_bp
     from .main import bp as main_bp
 
-    app.register_blueprint(auth_bp)
-    app.register_blueprint(csd_bp)
-    app.register_blueprint(grievances_bp)
-    app.register_blueprint(schemes_bp)
-    app.register_blueprint(main_bp)
+    # Scope everything under /welfare so existing site root (/) stays unchanged
+    app.register_blueprint(auth_bp, url_prefix="/welfare/auth")
+    app.register_blueprint(csd_bp, url_prefix="/welfare/csd")
+    app.register_blueprint(grievances_bp, url_prefix="/welfare/grievances")
+    app.register_blueprint(schemes_bp, url_prefix="/welfare/schemes")
+    app.register_blueprint(main_bp, url_prefix="/welfare")
 
     @login_manager.user_loader
     def load_user(user_id: str):

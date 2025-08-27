@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3>CSD Catalog</h3>
+  <a class="btn btn-outline-primary" href="{{ url_for('csd.view_cart') }}">View Cart</a>
+ </div>
+<div class="row g-3">
+  {% for item in items %}
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">{{ item.name }}</h5>
+        <p class="card-text">{{ item.description }}</p>
+        <p class="mb-2"><b>₹ {{ '%.2f'|format(item.price) }}</b> · Stock: {{ item.stock }}</p>
+        <form method="post" action="{{ url_for('csd.add_to_cart') }}" class="d-flex gap-2">
+          <input type="hidden" name="item_id" value="{{ item.id }}">
+          <input type="number" name="quantity" min="1" value="1" class="form-control" style="max-width: 100px;">
+          <button class="btn btn-primary" {% if item.stock == 0 %}disabled{% endif %}>Add to Cart</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

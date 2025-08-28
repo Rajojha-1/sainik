@@ -28,6 +28,14 @@ function initializeApp() {
     
     // Initialize form validation
     setupFormValidation();
+
+    // Restore session and cart
+    restoreSession();
+    loadCartFromStorage();
+    renderCartPage();
+    bindAuthForms();
+    setupGrievanceForm();
+    renderSchemes();
     
     console.log('Sainik Shifa Setu initialized successfully');
 }
@@ -83,6 +91,105 @@ function updateActiveNav(activeLink) {
     const navLinks = document.querySelectorAll('.nav-link');
     navLinks.forEach(link => link.classList.remove('active'));
     activeLink.classList.add('active');
+}
+
+// ========== Auth ==========
+function openAuthModal() {
+    const modal = document.getElementById('auth-modal');
+    if (modal) modal.style.display = 'block';
+}
+
+function closeAuthModal() {
+    const modal = document.getElementById('auth-modal');
+    if (modal) modal.style.display = 'none';
+}
+
+function showAuthTab(which) {
+    const loginForm = document.getElementById('login-form');
+    const signupForm = document.getElementById('signup-form');
+    const tabLogin = document.getElementById('tab-login');
+    const tabSignup = document.getElementById('tab-signup');
+    if (!loginForm || !signupForm) return;
+    if (which === 'login') {
+        loginForm.style.display = 'grid';
+        signupForm.style.display = 'none';
+        tabLogin.classList.add('active');
+        tabSignup.classList.remove('active');
+    } else {
+        loginForm.style.display = 'none';
+        signupForm.style.display = 'grid';
+        tabSignup.classList.add('active');
+        tabLogin.classList.remove('active');
+    }
+}
+
+function bindAuthForms() {
+    const login = document.getElementById('login-form');
+    const signup = document.getElementById('signup-form');
+    if (login) {
+        login.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            if (!email || !password) return;
+            const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = storedUsers.find(u => u.email === email && u.password === password);
+            if (!user) { showNotification('Invalid credentials', 'error'); return; }
+            localStorage.setItem('sessionUser', JSON.stringify({ name: user.name, email: user.email, role: user.role }));
+            updateAuthUI();
+            closeAuthModal();
+            renderSchemes();
+            showNotification('Welcome back!', 'success');
+        });
+    }
+    if (signup) {
+        signup.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const password = document.getElementById('signup-password').value;
+            const role = document.getElementById('signup-role').value;
+            if (!name || !email || !password) return;
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            if (users.some(u => u.email === email)) { showNotification('Email already registered', 'warning'); return; }
+            users.push({ name, email, password, role });
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('sessionUser', JSON.stringify({ name, email, role }));
+            updateAuthUI();
+            closeAuthModal();
+            renderSchemes();
+            showNotification('Account created!', 'success');
+        });
+    }
+}
+
+function restoreSession() {
+    updateAuthUI();
+}
+
+function updateAuthUI() {
+    const sessionUser = JSON.parse(localStorage.getItem('sessionUser') || 'null');
+    const loginBtn = document.getElementById('login-btn');
+    const userProfile = document.getElementById('user-profile');
+    const nameDisplay = document.getElementById('user-name-display');
+    if (sessionUser) {
+        if (loginBtn) loginBtn.style.display = 'none';
+        if (userProfile) userProfile.style.display = 'flex';
+        if (nameDisplay) nameDisplay.textContent = sessionUser.name;
+        const hint = document.getElementById('schemes-login-hint');
+        if (hint) hint.style.display = 'none';
+    } else {
+        if (loginBtn) loginBtn.style.display = 'inline-flex';
+        if (userProfile) userProfile.style.display = 'none';
+        const hint = document.getElementById('schemes-login-hint');
+        if (hint) hint.style.display = 'block';
+    }
+}
+
+function logout() {
+    localStorage.removeItem('sessionUser');
+    updateAuthUI();
+    renderSchemes();
 }
 
 // Mobile Menu Setup
@@ -414,8 +521,11 @@ function addToCart(productName, price) {
             quantity: 1
         });
     }
-    
+    saveCartToStorage();
     updateCartDisplay();
+    updateCartCount();
+    renderCartPage();
+    showNotification('Added to cart', 'success');
 }
 
 function updateCartDisplay() {
@@ -447,6 +557,169 @@ function updateCartDisplay() {
     document.getElementById('cart-total').textContent = `₹${total.toLocaleString()}`;
     
     cartSummary.style.display = 'block';
+}
+
+function updateCartCount() {
+    const badge = document.getElementById('cart-count');
+    if (!badge) return;
+    const count = cart.reduce((n, i) => n + i.quantity, 0);
+    badge.textContent = count;
+}
+
+function saveCartToStorage() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+function loadCartFromStorage() {
+    try {
+        const stored = JSON.parse(localStorage.getItem('cart') || '[]');
+        if (Array.isArray(stored)) cart = stored;
+    } catch {}
+    updateCartDisplay();
+    updateCartCount();
+}
+
+function changeItemQuantity(name, delta) {
+    const item = cart.find(i => i.name === name);
+    if (!item) return;
+    item.quantity += delta;
+    if (item.quantity <= 0) {
+        const idx = cart.findIndex(i => i.name === name);
+        if (idx >= 0) cart.splice(idx, 1);
+    }
+    saveCartToStorage();
+    updateCartDisplay();
+    updateCartCount();
+    renderCartPage();
+}
+
+function removeItem(name) {
+    cart = cart.filter(i => i.name !== name);
+    saveCartToStorage();
+    updateCartDisplay();
+    updateCartCount();
+    renderCartPage();
+}
+
+function renderCartPage() {
+    const container = document.getElementById('cart-page-items');
+    if (!container) return;
+    if (cart.length === 0) {
+        container.innerHTML = '<p class="empty-cart">Your cart is empty</p>';
+        document.getElementById('cart-page-subtotal').textContent = '₹0';
+        document.getElementById('cart-page-discount').textContent = '-₹0';
+        document.getElementById('cart-page-total').textContent = '₹0';
+        return;
+    }
+    container.innerHTML = cart.map(item => `
+        <div class="cart-item-row">
+            <div>${item.name}</div>
+            <div class="qty-controls">
+                <button class="qty-btn" onclick="changeItemQuantity('${item.name.replace(/'/g,"\\'")}', -1)">-</button>
+                <span>${item.quantity}</span>
+                <button class="qty-btn" onclick="changeItemQuantity('${item.name.replace(/'/g,"\\'")}', 1)">+</button>
+            </div>
+            <div>₹${(item.price * item.quantity).toLocaleString()}</div>
+            <button class="remove-btn" onclick="removeItem('${item.name.replace(/'/g,"\\'")}')">Remove</button>
+        </div>
+    `).join('');
+    const subtotal = cart.reduce((t,i)=>t+i.price*i.quantity,0);
+    const discount = Math.floor(subtotal*0.15);
+    const total = subtotal - discount;
+    document.getElementById('cart-page-subtotal').textContent = `₹${subtotal.toLocaleString()}`;
+    document.getElementById('cart-page-discount').textContent = `-₹${discount.toLocaleString()}`;
+    document.getElementById('cart-page-total').textContent = `₹${total.toLocaleString()}`;
+    const checkoutBtn = document.getElementById('checkout-btn');
+    if (checkoutBtn && !checkoutBtn._bound) {
+        checkoutBtn.addEventListener('click', ()=>{
+            showNotification('Checkout will be handled by backend', 'info');
+        });
+        checkoutBtn._bound = true;
+    }
+}
+
+// ========== Grievances ==========
+function setupGrievanceForm() {
+    const form = document.getElementById('grievance-form');
+    if (!form) return;
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const subject = document.getElementById('grievance-subject').value.trim();
+        const category = document.getElementById('grievance-category').value;
+        const priority = document.getElementById('grievance-priority').value;
+        const description = document.getElementById('grievance-description').value.trim();
+        if (!subject || !category || !priority || !description) return;
+        const sessionUser = JSON.parse(localStorage.getItem('sessionUser') || 'null');
+        const ticket = {
+            id: 'T' + Date.now().toString(36).toUpperCase(),
+            subject, category, priority, description,
+            status: 'Open',
+            createdAt: new Date().toISOString(),
+            owner: sessionUser ? sessionUser.email : 'guest'
+        };
+        const tickets = JSON.parse(localStorage.getItem('tickets') || '[]');
+        tickets.unshift(ticket);
+        localStorage.setItem('tickets', JSON.stringify(tickets));
+        renderTickets();
+        form.reset();
+        showNotification('Complaint submitted', 'success');
+    });
+    renderTickets();
+}
+
+function renderTickets() {
+    const container = document.getElementById('tickets-container');
+    if (!container) return;
+    const sessionUser = JSON.parse(localStorage.getItem('sessionUser') || 'null');
+    let tickets = JSON.parse(localStorage.getItem('tickets') || '[]');
+    if (sessionUser) {
+        tickets = tickets.filter(t => t.owner === sessionUser.email);
+    }
+    if (tickets.length === 0) { container.innerHTML = '<p class="empty-state">No tickets yet</p>'; return; }
+    container.innerHTML = tickets.map(t => `
+        <div class="ticket-card">
+            <div>
+                <strong>${t.subject}</strong>
+                <div class="ticket-meta">#${t.id} • ${t.category} • <span class="status-chip">${t.status}</span></div>
+                <div class="ticket-meta">${new Date(t.createdAt).toLocaleString()}</div>
+            </div>
+            <div><span class="priority-badge priority-${t.priority}">${t.priority}</span></div>
+        </div>
+    `).join('');
+}
+
+// ========== Schemes ==========
+const ALL_SCHEMES = [
+    { name: 'Education Scholarship A', tags: ['education','family'], description: 'Scholarship for soldiers’ children' },
+    { name: 'Medical Assistance B', tags: ['medical','veteran'], description: 'Medical support for veterans' },
+    { name: 'Housing Subsidy C', tags: ['housing','soldier'], description: 'Affordable housing scheme' },
+    { name: 'Pension Support D', tags: ['pension','veteran'], description: 'Enhanced pension support' },
+];
+
+function renderSchemes() {
+    const list = document.getElementById('schemes-list');
+    const suggestions = document.getElementById('schemes-suggestions');
+    if (list) {
+        list.innerHTML = ALL_SCHEMES.map(s => `
+            <div class="scheme-card">
+                <div><strong>${s.name}</strong></div>
+                <div>${s.description}</div>
+                <div class="scheme-tags">${s.tags.map(t=>`<span class="scheme-tag">${t}</span>`).join('')}</div>
+            </div>
+        `).join('');
+    }
+    if (suggestions) {
+        const sessionUser = JSON.parse(localStorage.getItem('sessionUser') || 'null');
+        if (!sessionUser) { suggestions.innerHTML = ''; return; }
+        const role = sessionUser.role; // soldier, veteran, family
+        const relevant = ALL_SCHEMES.filter(s => s.tags.includes(role));
+        suggestions.innerHTML = relevant.length ? relevant.map(s => `
+            <div class="scheme-card">
+                <div><strong>${s.name}</strong></div>
+                <div>${s.description}</div>
+            </div>
+        `).join('') : '<p>No personalized suggestions yet.</p>';
+    }
 }
 
 // Form Validation Setup

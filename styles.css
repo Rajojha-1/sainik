@@ -217,6 +217,21 @@ h4 { font-size: 1.25rem; }
     transform: translateY(-2px);
 }
 
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cart-count-badge {
+    background: var(--secondary-color);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    margin-left: 6px;
+}
+
 .mobile-menu-toggle {
     display: none;
     flex-direction: column;
@@ -1305,6 +1320,137 @@ h4 { font-size: 1.25rem; }
     box-shadow: var(--shadow);
     position: sticky;
     top: 120px;
+}
+
+/* Cart Page */
+.cart-page {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+.cart-page-items {
+    background: white;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+}
+
+.cart-item-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.qty-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.qty-btn {
+    padding: 4px 10px;
+    border: 1px solid #ccc;
+    background: #f7f7f7;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.remove-btn {
+    background: transparent;
+    color: #c23b3b;
+    border: none;
+    cursor: pointer;
+}
+
+.cart-page-summary {
+    background: white;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+    height: fit-content;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+}
+
+.modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    position: relative;
+    max-width: 480px;
+    margin: 8vh auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-body { padding: 1.25rem; }
+.modal-close { background: transparent; border: none; cursor: pointer; font-size: 1rem; }
+
+.auth-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+.auth-tab {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #fafafa;
+    cursor: pointer;
+}
+.auth-tab.active { background: var(--primary-color); color: white; border-color: var(--primary-color); }
+.auth-form { display: grid; gap: 1rem; margin-top: 0.5rem; }
+
+/* Grievances */
+.grievance-container { max-width: 900px; margin: 0 auto; }
+.tickets-list { margin-top: 2rem; }
+.tickets-container { display: grid; gap: 0.75rem; }
+.ticket-card {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    align-items: start;
+    background: white;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    padding: 1rem;
+}
+.ticket-meta { font-size: 0.875rem; color: #666; }
+.priority-badge { padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; }
+.priority-low { background: rgba(23, 162, 184, 0.15); color: var(--info-color); }
+.priority-medium { background: rgba(255, 193, 7, 0.15); color: var(--warning-color); }
+.priority-high { background: rgba(220, 53, 69, 0.15); color: var(--danger-color); }
+.status-chip { padding: 2px 8px; border-radius: 12px; background: #eef6ee; color: var(--primary-color); font-size: 0.75rem; }
+
+/* Schemes */
+.schemes-container { max-width: 1000px; margin: 0 auto; }
+.schemes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.schemes-list, .schemes-suggestions { background: white; border-radius: 12px; box-shadow: var(--shadow); padding: 1.25rem; }
+.scheme-card { border: 1px solid #eee; border-radius: 10px; padding: 0.75rem 1rem; margin-bottom: 0.75rem; }
+.scheme-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+.scheme-tag { background: #f1f5f9; border-radius: 10px; padding: 2px 8px; font-size: 0.75rem; }
+
+@media (max-width: 900px) {
+    .cart-page { grid-template-columns: 1fr; }
+    .schemes-grid { grid-template-columns: 1fr; }
 }
 
 .cart-items {

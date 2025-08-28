@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" crossorigin href="/assets/index-CYVEJJ0H.css">
+  <link rel="stylesheet" crossorigin href="/assets/index-CxM7RSAI.css">
 </head>
 <body>
     <!-- Top Bar -->
@@ -45,9 +45,19 @@
                         <li><a href="#token-booking" class="nav-link">📅 Token Booking</a></li>
                         <li><a href="#card-renewal" class="nav-link">💳 Card Renewal</a></li>
                         <li><a href="#emergency" class="nav-link">🚨 Emergency</a></li>
+                        <li><a href="#grievances" class="nav-link">📝 Grievances</a></li>
+                        <li><a href="#schemes" class="nav-link">🏛️ Welfare Schemes</a></li>
                         <li><a href="#csd-canteen" class="nav-link">🛒 CSD Canteen</a></li>
+                        <li><a href="#cart" class="nav-link">🛍️ Cart <span id="cart-count" class="cart-count-badge">0</span></a></li>
                     </ul>
                 </nav>
+                <div class="user-actions">
+                    <button class="btn btn-secondary btn-small" id="login-btn" onclick="openAuthModal()">Login / Signup</button>
+                    <div class="user-profile" id="user-profile" style="display: none;">
+                        <span id="user-name-display"></span>
+                        <button class="btn btn-secondary btn-small" onclick="logout()">Logout</button>
+                    </div>
+                </div>
                 <div class="mobile-menu-toggle">
                     <span></span>
                     <span></span>
@@ -750,7 +760,7 @@
                                     <div class="stock-status in-stock">✅ In Stock</div>
                                     <div class="quota-info">Quota: 2 per month</div>
                                 </div>
-                                <button class="btn btn-primary btn-small">Add to Cart</button>
+                                <button class="btn btn-primary btn-small" onclick="addToCart('Wheat Flour (5kg)', 180)">Add to Cart</button>
                             </div>
                             <div class="product-card">
                                 <div class="product-image">🍚</div>
@@ -763,7 +773,7 @@
                                     <div class="stock-status in-stock">✅ In Stock</div>
                                     <div class="quota-info">Quota: 3 per month</div>
                                 </div>
-                                <button class="btn btn-primary btn-small">Add to Cart</button>
+                                <button class="btn btn-primary btn-small" onclick="addToCart('Basmati Rice (5kg)', 350)">Add to Cart</button>
                             </div>
                             <div class="product-card">
                                 <div class="product-image">🥛</div>
@@ -776,7 +786,7 @@
                                     <div class="stock-status limited">⚠️ Limited Stock</div>
                                     <div class="quota-info">Quota: 1 per month</div>
                                 </div>
-                                <button class="btn btn-primary btn-small">Add to Cart</button>
+                                <button class="btn btn-primary btn-small" onclick="addToCart('Milk Powder (1kg)', 420)">Add to Cart</button>
                             </div>
                             <div class="product-card">
                                 <div class="product-image">🛢️</div>
@@ -808,7 +818,7 @@
                                     <div class="stock-status in-stock">✅ In Stock</div>
                                     <div class="quota-info">Quota: 1 per year</div>
                                 </div>
-                                <button class="btn btn-primary btn-small">Add to Cart</button>
+                                <button class="btn btn-primary btn-small" onclick="addToCart('Smartphone', 12000)">Add to Cart</button>
                             </div>
                             <div class="product-card">
                                 <div class="product-image">💻</div>
@@ -821,7 +831,7 @@
                                     <div class="stock-status limited">⚠️ Limited Stock</div>
                                     <div class="quota-info">Quota: 1 per 2 years</div>
                                 </div>
-                                <button class="btn btn-primary btn-small">Add to Cart</button>
+                                <button class="btn btn-primary btn-small" onclick="addToCart('Laptop', 35000)">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -847,6 +857,99 @@
                             </div>
                             <button class="btn btn-primary">Proceed to Checkout</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Grievances Section -->
+        <section id="grievances" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h1>📝 Smart Grievance Redressal</h1>
+                    <p>Raise and track complaints such as pension delays, facilities, and more</p>
+                </div>
+                <div class="grievance-container">
+                    <form id="grievance-form" class="grievance-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="grievance-subject">Subject *</label>
+                                <input type="text" id="grievance-subject" placeholder="e.g., Pension delay" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="grievance-category">Category *</label>
+                                <select id="grievance-category" required>
+                                    <option value="">Select</option>
+                                    <option value="pension">Pension</option>
+                                    <option value="facilities">Facilities</option>
+                                    <option value="medical">Medical</option>
+                                    <option value="housing">Housing</option>
+                                    <option value="education">Education</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="grievance-priority">Priority *</label>
+                                <select id="grievance-priority" required>
+                                    <option value="low">Low</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="grievance-description">Description *</label>
+                                <textarea id="grievance-description" placeholder="Describe your grievance" required></textarea>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Submit Complaint</button>
+                    </form>
+
+                    <div class="tickets-list">
+                        <h3>Your Tickets</h3>
+                        <div id="tickets-container" class="tickets-container">
+                            <p class="empty-state">No tickets yet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Welfare Schemes Hub -->
+        <section id="schemes" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h1>🏛️ Centralized Welfare Schemes Hub</h1>
+                    <p>Explore education, pension, medical, and housing schemes in one place</p>
+                </div>
+                <div class="schemes-container">
+                    <div class="schemes-grid">
+                        <div class="schemes-list">
+                            <h3>All Schemes</h3>
+                            <div id="schemes-list"></div>
+                        </div>
+                        <div class="schemes-suggestions">
+                            <h3>Personalized Suggestions</h3>
+                            <p id="schemes-login-hint">Login to see personalized schemes</p>
+                            <div id="schemes-suggestions"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cart Page -->
+        <section id="cart" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h1>🛍️ Your Cart</h1>
+                    <p>Review items and proceed to checkout</p>
+                </div>
+                <div class="cart-page">
+                    <div id="cart-page-items" class="cart-page-items"></div>
+                    <div class="cart-page-summary">
+                        <div class="summary-row"><span>Subtotal:</span><span id="cart-page-subtotal">₹0</span></div>
+                        <div class="summary-row"><span>CSD Discount:</span><span id="cart-page-discount">-₹0</span></div>
+                        <div class="summary-row total"><span>Total:</span><span id="cart-page-total">₹0</span></div>
+                        <button class="btn btn-primary" id="checkout-btn" type="button">Proceed to Checkout</button>
                     </div>
                 </div>
             </div>
@@ -897,6 +1000,59 @@
             </div>
         </div>
     </footer>
+
+    <!-- Auth Modal -->
+    <div class="modal" id="auth-modal" style="display: none;">
+        <div class="modal-backdrop" onclick="closeAuthModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Account</h3>
+                <button class="modal-close" onclick="closeAuthModal()">✖</button>
+            </div>
+            <div class="modal-body">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" id="tab-login" onclick="showAuthTab('login')">Login</button>
+                    <button class="auth-tab" id="tab-signup" onclick="showAuthTab('signup')">Signup</button>
+                </div>
+                <div class="auth-forms">
+                    <form id="login-form" class="auth-form">
+                        <div class="form-group">
+                            <label for="login-email">Email</label>
+                            <input type="email" id="login-email" placeholder="name@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Password</label>
+                            <input type="password" id="login-password" placeholder="••••••••" required>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Login</button>
+                    </form>
+                    <form id="signup-form" class="auth-form" style="display: none;">
+                        <div class="form-group">
+                            <label for="signup-name">Full Name</label>
+                            <input type="text" id="signup-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signup-email">Email</label>
+                            <input type="email" id="signup-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signup-password">Password</label>
+                            <input type="password" id="signup-password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signup-role">Role</label>
+                            <select id="signup-role">
+                                <option value="soldier">Soldier</option>
+                                <option value="veteran">Veteran</option>
+                                <option value="family">Family</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Create Account</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

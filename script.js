@@ -1,5 +1,7 @@
 // Global variables
 let currentStep = 1;
+const NODE_API_BASE = window.NODE_API_BASE || 'http://localhost:4000';
+const PY_API_BASE = window.PY_API_BASE || 'http://localhost:5001';
 let bookingData = {
     category: '',
     department: '',
@@ -38,6 +40,21 @@ function initializeApp() {
     renderSchemes();
     
     console.log('Sainik Shifa Setu initialized successfully');
+}
+
+// Generic API helper with graceful fallback
+async function safeFetchJson(url, options) {
+    try {
+        const res = await fetch(url, {
+            headers: { 'Content-Type': 'application/json', ...(options && options.headers ? options.headers : {}) },
+            ...options,
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+    } catch (err) {
+        console.warn('API unavailable, falling back:', url, err);
+        return null;
+    }
 }
 
 // Navigation Setup
@@ -127,15 +144,25 @@ function bindAuthForms() {
     const login = document.getElementById('login-form');
     const signup = document.getElementById('signup-form');
     if (login) {
-        login.addEventListener('submit', function(e) {
+        login.addEventListener('submit', async function(e) {
             e.preventDefault();
             const email = document.getElementById('login-email').value.trim();
             const password = document.getElementById('login-password').value;
             if (!email || !password) return;
-            const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
-            const user = storedUsers.find(u => u.email === email && u.password === password);
-            if (!user) { showNotification('Invalid credentials', 'error'); return; }
-            localStorage.setItem('sessionUser', JSON.stringify({ name: user.name, email: user.email, role: user.role }));
+            // Try backend first
+            const apiUser = await safeFetchJson(`${NODE_API_BASE}/api/auth/login`, {
+                method: 'POST',
+                body: JSON.stringify({ email, password })
+            });
+            if (apiUser) {
+                localStorage.setItem('sessionUser', JSON.stringify(apiUser));
+            } else {
+                // Fallback to local
+                const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+                const user = storedUsers.find(u => u.email === email && u.password === password);
+                if (!user) { showNotification('Invalid credentials', 'error'); return; }
+                localStorage.setItem('sessionUser', JSON.stringify({ name: user.name, email: user.email, role: user.role }));
+            }
             updateAuthUI();
             closeAuthModal();
             renderSchemes();
@@ -143,18 +170,28 @@ function bindAuthForms() {
         });
     }
     if (signup) {
-        signup.addEventListener('submit', function(e) {
+        signup.addEventListener('submit', async function(e) {
             e.preventDefault();
             const name = document.getElementById('signup-name').value.trim();
             const email = document.getElementById('signup-email').value.trim();
             const password = document.getElementById('signup-password').value;
             const role = document.getElementById('signup-role').value;
             if (!name || !email || !password) return;
-            const users = JSON.parse(localStorage.getItem('users') || '[]');
-            if (users.some(u => u.email === email)) { showNotification('Email already registered', 'warning'); return; }
-            users.push({ name, email, password, role });
-            localStorage.setItem('users', JSON.stringify(users));
-            localStorage.setItem('sessionUser', JSON.stringify({ name, email, role }));
+            // Try backend first
+            const apiUser = await safeFetchJson(`${NODE_API_BASE}/api/auth/signup`, {
+                method: 'POST',
+                body: JSON.stringify({ name, email, password, role })
+            });
+            if (apiUser) {
+                localStorage.setItem('sessionUser', JSON.stringify(apiUser));
+            } else {
+                // Fallback to local
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                if (users.some(u => u.email === email)) { showNotification('Email already registered', 'warning'); return; }
+                users.push({ name, email, password, role });
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('sessionUser', JSON.stringify({ name, email, role }));
+            }
             updateAuthUI();
             closeAuthModal();
             renderSchemes();
@@ -642,7 +679,7 @@ function renderCartPage() {
 function setupGrievanceForm() {
     const form = document.getElementById('grievance-form');
     if (!form) return;
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
         const subject = document.getElementById('grievance-subject').value.trim();
         const category = document.getElementById('grievance-category').value;
@@ -650,16 +687,24 @@ function setupGrievanceForm() {
         const description = document.getElementById('grievance-description').value.trim();
         if (!subject || !category || !priority || !description) return;
         const sessionUser = JSON.parse(localStorage.getItem('sessionUser') || 'null');
-        const ticket = {
-            id: 'T' + Date.now().toString(36).toUpperCase(),
-            subject, category, priority, description,
-            status: 'Open',
-            createdAt: new Date().toISOString(),
-            owner: sessionUser ? sessionUser.email : 'guest'
-        };
-        const tickets = JSON.parse(localStorage.getItem('tickets') || '[]');
-        tickets.unshift(ticket);
-        localStorage.setItem('tickets', JSON.stringify(tickets));
+        // Try backend first
+        const created = await safeFetchJson(`${NODE_API_BASE}/api/grievances`, {
+            method: 'POST',
+            body: JSON.stringify({ subject, category, priority, description, owner: sessionUser ? sessionUser.email : 'guest' })
+        });
+        if (!created) {
+            // Fallback to local
+            const ticket = {
+                id: 'T' + Date.now().toString(36).toUpperCase(),
+                subject, category, priority, description,
+                status: 'Open',
+                createdAt: new Date().toISOString(),
+                owner: sessionUser ? sessionUser.email : 'guest'
+            };
+            const tickets = JSON.parse(localStorage.getItem('tickets') || '[]');
+            tickets.unshift(ticket);
+            localStorage.setItem('tickets', JSON.stringify(tickets));
+        }
         renderTickets();
         form.reset();
         showNotification('Complaint submitted', 'success');
@@ -671,10 +716,44 @@ function renderTickets() {
     const container = document.getElementById('tickets-container');
     if (!container) return;
     const sessionUser = JSON.parse(localStorage.getItem('sessionUser') || 'null');
-    let tickets = JSON.parse(localStorage.getItem('tickets') || '[]');
-    if (sessionUser) {
-        tickets = tickets.filter(t => t.owner === sessionUser.email);
-    }
+    let tickets = [];
+    // Try backend first
+    // If not logged in, show all tickets (local behavior shows none for guest)
+    // For privacy, when logged in query by email
+    const endpoint = sessionUser ? `${NODE_API_BASE}/api/grievances?email=${encodeURIComponent(sessionUser.email)}` : `${NODE_API_BASE}/api/grievances`;
+    // Note: safeFetchJson returns null on failure
+    // eslint-disable-next-line no-undef
+    const fetchTickets = typeof fetch !== 'undefined' ? null : null;
+    // Use safeFetchJson regardless
+    // (Declaring a dummy to satisfy linters in environments where fetch is not defined)
+    // Fetch
+    //
+    // Attempt API
+    //
+    //
+    
+    // We cannot await at top-level; wrap in async IIFE style replaced by then-chain here
+    // Instead, synchronous path: fallback immediately
+    // Then schedule an async update
+    tickets = JSON.parse(localStorage.getItem('tickets') || '[]');
+    if (sessionUser) tickets = tickets.filter(t => t.owner === sessionUser.email);
+    (async () => {
+        const apiTickets = await safeFetchJson(endpoint);
+        if (apiTickets && Array.isArray(apiTickets)) {
+            tickets = apiTickets;
+            container.innerHTML = tickets.length === 0 ? '<p class="empty-state">No tickets yet</p>' : tickets.map(t => `
+                <div class="ticket-card">
+                    <div>
+                        <strong>${t.subject}</strong>
+                        <div class="ticket-meta">#${t.id} • ${t.category} • <span class="status-chip">${t.status}</span></div>
+                        <div class="ticket-meta">${new Date(t.createdAt).toLocaleString()}</div>
+                    </div>
+                    <div><span class="priority-badge priority-${t.priority}">${t.priority}</span></div>
+                </div>
+            `).join('');
+            return;
+        }
+    })();
     if (tickets.length === 0) { container.innerHTML = '<p class="empty-state">No tickets yet</p>'; return; }
     container.innerHTML = tickets.map(t => `
         <div class="ticket-card">
@@ -699,27 +778,34 @@ const ALL_SCHEMES = [
 function renderSchemes() {
     const list = document.getElementById('schemes-list');
     const suggestions = document.getElementById('schemes-suggestions');
-    if (list) {
-        list.innerHTML = ALL_SCHEMES.map(s => `
-            <div class="scheme-card">
-                <div><strong>${s.name}</strong></div>
-                <div>${s.description}</div>
-                <div class="scheme-tags">${s.tags.map(t=>`<span class="scheme-tag">${t}</span>`).join('')}</div>
-            </div>
-        `).join('');
-    }
-    if (suggestions) {
-        const sessionUser = JSON.parse(localStorage.getItem('sessionUser') || 'null');
-        if (!sessionUser) { suggestions.innerHTML = ''; return; }
-        const role = sessionUser.role; // soldier, veteran, family
-        const relevant = ALL_SCHEMES.filter(s => s.tags.includes(role));
-        suggestions.innerHTML = relevant.length ? relevant.map(s => `
-            <div class="scheme-card">
-                <div><strong>${s.name}</strong></div>
-                <div>${s.description}</div>
-            </div>
-        `).join('') : '<p>No personalized suggestions yet.</p>';
-    }
+    (async () => {
+        // Fetch master list from Node API; fallback to local
+        const remoteList = await safeFetchJson(`${NODE_API_BASE}/api/schemes`);
+        const listData = Array.isArray(remoteList) && remoteList.length ? remoteList.map(s => ({...s, description: s.description || ''})) : ALL_SCHEMES;
+        if (list) {
+            list.innerHTML = listData.map(s => `
+                <div class="scheme-card">
+                    <div><strong>${s.name}</strong></div>
+                    <div>${s.description || ''}</div>
+                    <div class="scheme-tags">${(s.tags||[]).map(t=>`<span class="scheme-tag">${t}</span>`).join('')}</div>
+                </div>
+            `).join('');
+        }
+        if (suggestions) {
+            const sessionUser = JSON.parse(localStorage.getItem('sessionUser') || 'null');
+            if (!sessionUser) { suggestions.innerHTML = ''; return; }
+            const role = sessionUser.role;
+            // Try Python API first
+            const recs = await safeFetchJson(`${PY_API_BASE}/api/recommendations?role=${encodeURIComponent(role)}`);
+            const relevant = Array.isArray(recs) && recs.length ? recs : listData.filter(s => (s.tags||[]).includes(role));
+            suggestions.innerHTML = relevant.length ? relevant.map(s => `
+                <div class="scheme-card">
+                    <div><strong>${s.name}</strong></div>
+                    <div>${s.description || ''}</div>
+                </div>
+            `).join('') : '<p>No personalized suggestions yet.</p>';
+        }
+    })();
 }
 
 // Form Validation Setup

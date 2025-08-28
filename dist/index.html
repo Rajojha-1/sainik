@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sainik Shifa Setu - Digital Health Bridge for Soldiers</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" crossorigin href="/assets/index-CYVEJJ0H.css">
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-content">
+                <div class="contact-info">
+                    <span>🚨 Emergency: <strong>1911</strong></span>
+                    <span>📧 hospital@army.gov.in</span>
+                    <span>📍 Military Hospital, New Delhi</span>
+                </div>
+                <div class="language-toggle">
+                    <button onclick="toggleLanguage()">हिंदी</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo">
+                        <div class="shield-logo">🛡️</div>
+                        <div class="brand-text">
+                            <h1>Sainik Shifa Setu</h1>
+                            <p>Digital Health Bridge for Soldiers</p>
+                        </div>
+                    </div>
+                </div>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="#home" class="nav-link active">🏠 Home</a></li>
+                        <li><a href="#token-booking" class="nav-link">📅 Token Booking</a></li>
+                        <li><a href="#card-renewal" class="nav-link">💳 Card Renewal</a></li>
+                        <li><a href="#emergency" class="nav-link">🚨 Emergency</a></li>
+                        <li><a href="#csd-canteen" class="nav-link">🛒 CSD Canteen</a></li>
+                    </ul>
+                </nav>
+                <div class="mobile-menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <!-- Hero Section -->
+            <div class="hero">
+                <div class="container">
+                    <div class="hero-content">
+                        <div class="hero-text">
+                            <h1>Excellence in Healthcare</h1>
+                            <p>Digital healthcare services eliminating waiting queues for our brave soldiers and their families</p>
+                            <div class="quick-actions">
+                                <button class="btn btn-primary" onclick="showSection('token-booking')">
+                                    🟢 Book Token Now
+                                </button>
+                                <button class="btn btn-emergency" onclick="showSection('emergency')">
+                                    🔴 Emergency Call
+                                </button>
+                                <button class="btn btn-secondary" onclick="showSection('card-renewal')">
+                                    🔵 Check Card Status
+                                </button>
+                            </div>
+                        </div>
+                        <div class="hero-image">
+                            <img src="https://images.pexels.com/photos/263402/pexels-photo-263402.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Military Healthcare" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Status Dashboard -->
+            <div class="status-dashboard">
+                <div class="container">
+                    <h2>Live Status Dashboard</h2>
+                    <div class="status-grid">
+                        <div class="status-card">
+                            <div class="status-icon">🎫</div>
+                            <div class="status-info">
+                                <h3>Current Token</h3>
+                                <span class="status-value" id="current-token">T-145</span>
+                            </div>
+                        </div>
+                        <div class="status-card">
+                            <div class="status-icon">⏰</div>
+                            <div class="status-info">
+                                <h3>Average Wait</h3>
+                                <span class="status-value" id="avg-wait">12 minutes</span>
+                            </div>
+                        </div>
+                        <div class="status-card">
+                            <div class="status-icon">🚨</div>
+                            <div class="status-info">
+                                <h3>Emergency</h3>
+                                <span class="status-value status-available">✅ Available</span>
+                            </div>
+                        </div>
+                        <div class="status-card">
+                            <div class="status-icon">🏥</div>
+                            <div class="status-info">
+                                <h3>OPD Status</h3>
+                                <span class="status-value status-active">🔵 Active</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Section -->
+            <div class="statistics">
+                <div class="container">
+                    <h2>Our Impact</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">👥</div>
+                            <div class="stat-number">2,500+</div>
+                            <div class="stat-label">Patients Served Daily</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⏰</div>
+                            <div class="stat-number">&lt; 15 min</div>
+                            <div class="stat-label">Average Wait Time</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🚨</div>
+                            <div class="stat-number">&lt; 5 min</div>
+                            <div class="stat-label">Emergency Response</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🏥</div>
+                            <div class="stat-number">25+</div>
+                            <div class="stat-label">Departments</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Services -->
+            <div class="main-services">
+                <div class="container">
+                    <h2>Our Services</h2>
+                    <div class="services-grid">
+                        <div class="service-card" onclick="showSection('token-booking')">
+                            <div class="service-header">
+                                <div class="service-icon">📅</div>
+                                <div class="service-status status-active">🟢 Active</div>
+                            </div>
+                            <h3>Token Booking System</h3>
+                            <p>Online appointment booking, avoid waiting lines</p>
+                            <ul>
+                                <li>Multi-step booking process</li>
+                                <li>Real-time wait times</li>
+                                <li>Instant confirmation</li>
+                            </ul>
+                        </div>
+                        <div class="service-card" onclick="showSection('card-renewal')">
+                            <div class="service-header">
+                                <div class="service-icon">💳</div>
+                                <div class="service-status status-available">🔵 Available</div>
+                            </div>
+                            <h3>Card Renewal</h3>
+                            <p>Medical card renewal and validity checking</p>
+                            <ul>
+                                <li>Check expiry dates</li>
+                                <li>Online renewal</li>
+                                <li>Digital downloads</li>
+                            </ul>
+                        </div>
+                        <div class="service-card" onclick="showSection('emergency')">
+                            <div class="service-header">
+                                <div class="service-icon">🚨</div>
+                                <div class="service-status status-emergency">🔴 24/7</div>
+                            </div>
+                            <h3>Emergency Services</h3>
+                            <p>Priority emergency medical services</p>
+                            <ul>
+                                <li>24/7 availability</li>
+                                <li>Priority queue</li>
+                                <li>Ambulance services</li>
+                            </ul>
+                        </div>
+                        <div class="service-card" onclick="showSection('csd-canteen')">
+                            <div class="service-header">
+                                <div class="service-icon">🛒</div>
+                                <div class="service-status status-open">🟣 Open</div>
+                            </div>
+                            <h3>CSD Canteen</h3>
+                            <p>Item availability and purchase management</p>
+                            <ul>
+                                <li>Real-time stock updates</li>
+                                <li>Price comparisons</li>
+                                <li>Quota management</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Token Booking Section -->
+        <section id="token-booking" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h1>📅 Token Booking System</h1>
+                    <p>Book your appointment and avoid waiting in long queues</p>
+                </div>
+
+                <div class="booking-container">
+                    <div class="booking-steps">
+                        <div class="step active" data-step="1">
+                            <div class="step-number">1</div>
+                            <div class="step-title">Category</div>
+                        </div>
+                        <div class="step" data-step="2">
+                            <div class="step-number">2</div>
+                            <div class="step-title">Department</div>
+                        </div>
+                        <div class="step" data-step="3">
+                            <div class="step-number">3</div>
+                            <div class="step-title">Time Slot</div>
+                        </div>
+                        <div class="step" data-step="4">
+                            <div class="step-number">4</div>
+                            <div class="step-title">Details</div>
+                        </div>
+                        <div class="step" data-step="5">
+                            <div class="step-number">5</div>
+                            <div class="step-title">Confirmation</div>
+                        </div>
+                    </div>
+
+                    <div class="booking-form">
+                        <!-- Step 1: Category Selection -->
+                        <div class="form-step active" id="step-1">
+                            <h3>Select Patient Category</h3>
+                            <div class="category-grid">
+                                <div class="category-card" onclick="selectCategory('soldier')">
+                                    <div class="category-icon">🎖️</div>
+                                    <h4>Active Soldier</h4>
+                                    <p>Currently serving personnel</p>
+                                </div>
+                                <div class="category-card" onclick="selectCategory('veteran')">
+                                    <div class="category-icon">🏅</div>
+                                    <h4>Veteran</h4>
+                                    <p>Retired service personnel</p>
+                                </div>
+                                <div class="category-card" onclick="selectCategory('family')">
+                                    <div class="category-icon">👨‍👩‍👧‍👦</div>
+                                    <h4>Family Member</h4>
+                                    <p>Spouse or children</p>
+                                </div>
+                                <div class="category-card" onclick="selectCategory('dependent')">
+                                    <div class="category-icon">👵</div>
+                                    <h4>Dependent</h4>
+                                    <p>Parents or dependent relatives</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Department Selection -->
+                        <div class="form-step" id="step-2">
+                            <h3>Select Department</h3>
+                            <div class="department-grid">
+                                <div class="department-card" onclick="selectDepartment('general')">
+                                    <div class="dept-info">
+                                        <h4>General Medicine</h4>
+                                        <p>Wait Time: 15 mins</p>
+                                    </div>
+                                    <div class="dept-status available">Available</div>
+                                </div>
+                                <div class="department-card" onclick="selectDepartment('cardiology')">
+                                    <div class="dept-info">
+                                        <h4>Cardiology</h4>
+                                        <p>Wait Time: 25 mins</p>
+                                    </div>
+                                    <div class="dept-status available">Available</div>
+                                </div>
+                                <div class="department-card" onclick="selectDepartment('orthopedics')">
+                                    <div class="dept-info">
+                                        <h4>Orthopedics</h4>
+                                        <p>Wait Time: 20 mins</p>
+                                    </div>
+                                    <div class="dept-status available">Available</div>
+                                </div>
+                                <div class="department-card" onclick="selectDepartment('dermatology')">
+                                    <div class="dept-info">
+                                        <h4>Dermatology</h4>
+                                        <p>Wait Time: 30 mins</p>
+                                    </div>
+                                    <div class="dept-status busy">Limited</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Time Slot Selection -->
+                        <div class="form-step" id="step-3">
+                            <h3>Select Time Slot</h3>
+                            <div class="time-slots">
+                                <div class="date-selector">
+                                    <button class="date-btn active" onclick="selectDate(this)">Today</button>
+                                    <button class="date-btn" onclick="selectDate(this)">Tomorrow</button>
+                                    <button class="date-btn" onclick="selectDate(this)">Day After</button>
+                                </div>
+                                <div class="slots-grid">
+                                    <div class="time-slot" onclick="selectTimeSlot(this)">09:00 AM</div>
+                                    <div class="time-slot" onclick="selectTimeSlot(this)">09:30 AM</div>
+                                    <div class="time-slot" onclick="selectTimeSlot(this)">10:00 AM</div>
+                                    <div class="time-slot unavailable">10:30 AM</div>
+                                    <div class="time-slot" onclick="selectTimeSlot(this)">11:00 AM</div>
+                                    <div class="time-slot" onclick="selectTimeSlot(this)">11:30 AM</div>
+                                    <div class="time-slot" onclick="selectTimeSlot(this)">02:00 PM</div>
+                                    <div class="time-slot" onclick="selectTimeSlot(this)">02:30 PM</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Patient Details -->
+                        <div class="form-step" id="step-4">
+                            <h3>Patient Information</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="patient-name">Full Name *</label>
+                                    <input type="text" id="patient-name" placeholder="Enter full name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="service-number">Service Number *</label>
+                                    <input type="text" id="service-number" placeholder="Enter service number" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Mobile Number *</label>
+                                    <input type="tel" id="phone" placeholder="Enter mobile number" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="age">Age *</label>
+                                    <input type="number" id="age" placeholder="Enter age" required>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="symptoms">Chief Complaint</label>
+                                    <textarea id="symptoms" placeholder="Describe your symptoms or reason for visit"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 5: Confirmation -->
+                        <div class="form-step" id="step-5">
+                            <h3>Booking Confirmation</h3>
+                            <div class="confirmation-card">
+                                <div class="token-display">
+                                    <h2>Your Token: <span id="token-number">T-156</span></h2>
+                                </div>
+                                <div class="booking-summary">
+                                    <div class="summary-row">
+                                        <span>Patient:</span>
+                                        <span id="confirm-name">-</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span>Category:</span>
+                                        <span id="confirm-category">-</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span>Department:</span>
+                                        <span id="confirm-department">-</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span>Date & Time:</span>
+                                        <span id="confirm-datetime">-</span>
+                                    </div>
+                                </div>
+                                <div class="qr-code">
+                                    <div class="qr-placeholder">📱 QR Code</div>
+                                    <p>Show this QR code at the reception</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-navigation">
+                            <button class="btn btn-secondary" id="prev-btn" onclick="previousStep()" style="display: none;">Previous</button>
+                            <button class="btn btn-primary" id="next-btn" onclick="nextStep()">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Card Renewal Section -->
+        <section id="card-renewal" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h1>💳 Medical Card Renewal</h1>
+                    <p>Manage your medical card renewal and check validity status</p>
+                </div>
+
+                <div class="card-renewal-container">
+                    <div class="renewal-options">
+                        <div class="option-card" onclick="showCardCheck()">
+                            <div class="option-icon">🔍</div>
+                            <h3>Check Card Status</h3>
+                            <p>Verify your card validity and expiry date</p>
+                        </div>
+                        <div class="option-card" onclick="showRenewalForm()">
+                            <div class="option-icon">🔄</div>
+                            <h3>Renew Card</h3>
+                            <p>Submit renewal application online</p>
+                        </div>
+                        <div class="option-card" onclick="showDownloadCard()">
+                            <div class="option-icon">📱</div>
+                            <h3>Download Digital Card</h3>
+                            <p>Get your digital medical card</p>
+                        </div>
+                    </div>
+
+                    <!-- Card Status Check -->
+                    <div class="card-section" id="card-check">
+                        <h3>Check Card Status</h3>
+                        <div class="check-form">
+                            <div class="form-group">
+                                <label for="check-service-number">Service Number</label>
+                                <input type="text" id="check-service-number" placeholder="Enter your service number">
+                            </div>
+                            <div class="form-group">
+                                <label for="check-dob">Date of Birth</label>
+                                <input type="date" id="check-dob">
+                            </div>
+                            <button class="btn btn-primary" onclick="checkCardStatus()">Check Status</button>
+                        </div>
+                        
+                        <div class="card-status-result" id="status-result" style="display: none;">
+                            <div class="status-card-display">
+                                <div class="card-preview">
+                                    <div class="card-header">
+                                        <div class="card-logo">🛡️</div>
+                                        <div class="card-title">MEDICAL CARD</div>
+                                    </div>
+                                    <div class="card-info">
+                                        <div class="info-row">
+                                            <span>Name:</span>
+                                            <span>Col. Rajesh Kumar</span>
+                                        </div>
+                                        <div class="info-row">
+                                            <span>Service No:</span>
+                                            <span>IC-56789</span>
+                                        </div>
+                                        <div class="info-row">
+                                            <span>Valid Till:</span>
+                                            <span class="expiry-date">31-Dec-2024</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="status-info">
+                                    <div class="status-badge valid">✅ Valid</div>
+                                    <p>Your medical card is valid and active</p>
+                                    <div class="renewal-reminder">
+                                        <strong>Renewal Due:</strong> In 2 months
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Renewal Form -->
+                    <div class="card-section" id="renewal-form" style="display: none;">
+                        <h3>Card Renewal Application</h3>
+                        <div class="renewal-form-container">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="renewal-name">Full Name</label>
+                                    <input type="text" id="renewal-name" placeholder="Enter full name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="renewal-service">Service Number</label>
+                                    <input type="text" id="renewal-service" placeholder="Enter service number">
+                                </div>
+                                <div class="form-group">
+                                    <label for="renewal-rank">Rank</label>
+                                    <select id="renewal-rank">
+                                        <option>Select Rank</option>
+                                        <option>Colonel</option>
+                                        <option>Major</option>
+                                        <option>Captain</option>
+                                        <option>Lieutenant</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="renewal-unit">Unit</label>
+                                    <input type="text" id="renewal-unit" placeholder="Enter unit name">
+                                </div>
+                            </div>
+                            
+                            <div class="document-upload">
+                                <h4>Required Documents</h4>
+                                <div class="upload-grid">
+                                    <div class="upload-card">
+                                        <div class="upload-icon">📄</div>
+                                        <h5>Service Certificate</h5>
+                                        <input type="file" accept=".pdf,.jpg,.png">
+                                        <p>Upload service certificate</p>
+                                    </div>
+                                    <div class="upload-card">
+                                        <div class="upload-icon">📷</div>
+                                        <h5>Passport Photo</h5>
+                                        <input type="file" accept=".jpg,.png">
+                                        <p>Recent passport size photo</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary">Submit Renewal Application</button>
+                        </div>
+                    </div>
+
+                    <!-- Download Card -->
+                    <div class="card-section" id="download-card" style="display: none;">
+                        <h3>Download Digital Card</h3>
+                        <div class="download-container">
+                            <div class="digital-card-preview">
+                                <div class="digital-card">
+                                    <div class="card-front">
+                                        <div class="card-header">
+                                            <div class="card-logo">🛡️</div>
+                                            <div>
+                                                <div class="card-title">INDIAN ARMY</div>
+                                                <div class="card-subtitle">Medical Card</div>
+                                            </div>
+                                        </div>
+                                        <div class="card-photo">👤</div>
+                                        <div class="card-details">
+                                            <div class="detail-row">
+                                                <span>Name:</span>
+                                                <span>Col. Rajesh Kumar</span>
+                                            </div>
+                                            <div class="detail-row">
+                                                <span>Service No:</span>
+                                                <span>IC-56789</span>
+                                            </div>
+                                            <div class="detail-row">
+                                                <span>Rank:</span>
+                                                <span>Colonel</span>
+                                            </div>
+                                            <div class="detail-row">
+                                                <span>Valid Till:</span>
+                                                <span>31-Dec-2024</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="download-options">
+                                <button class="btn btn-primary">📱 Download Digital Card</button>
+                                <button class="btn btn-secondary">📧 Email Card</button>
+                                <button class="btn btn-secondary">🖨️ Print Card</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Emergency Section -->
+        <section id="emergency" class="section emergency-section">
+            <div class="container">
+                <div class="section-header emergency-header">
+                    <h1>🚨 Emergency Services</h1>
+                    <p>24/7 Priority Emergency Medical Services</p>
+                    <div class="emergency-status">
+                        <div class="status-indicator active"></div>
+                        <span>Emergency Services Active</span>
+                    </div>
+                </div>
+
+                <div class="emergency-container">
+                    <!-- Emergency Actions -->
+                    <div class="emergency-actions">
+                        <div class="action-card urgent" onclick="callEmergency()">
+                            <div class="action-icon">🚨</div>
+                            <h3>Call Emergency</h3>
+                            <p class="emergency-number">1911</p>
+                            <button class="btn btn-emergency">Call Now</button>
+                        </div>
+                        <div class="action-card" onclick="bookEmergencySlot()">
+                            <div class="action-icon">🏥</div>
+                            <h3>Priority Booking</h3>
+                            <p>Skip queue for urgent cases</p>
+                            <button class="btn btn-primary">Book Priority Slot</button>
+                        </div>
+                        <div class="action-card" onclick="requestAmbulance()">
+                            <div class="action-icon">🚑</div>
+                            <h3>Ambulance Service</h3>
+                            <p>Request emergency transport</p>
+                            <button class="btn btn-secondary">Request Ambulance</button>
+                        </div>
+                    </div>
+
+                    <!-- Emergency Departments -->
+                    <div class="emergency-departments">
+                        <h3>Emergency Departments Status</h3>
+                        <div class="dept-status-grid">
+                            <div class="dept-status-card">
+                                <div class="dept-icon">❤️</div>
+                                <div class="dept-info">
+                                    <h4>Emergency Medicine</h4>
+                                    <div class="status-badge available">Available</div>
+                                    <p>Response Time: &lt; 5 min</p>
+                                </div>
+                            </div>
+                            <div class="dept-status-card">
+                                <div class="dept-icon">🧠</div>
+                                <div class="dept-info">
+                                    <h4>Critical Care</h4>
+                                    <div class="status-badge available">Available</div>
+                                    <p>ICU Beds: 3 Available</p>
+                                </div>
+                            </div>
+                            <div class="dept-status-card">
+                                <div class="dept-icon">🦴</div>
+                                <div class="dept-info">
+                                    <h4>Trauma Surgery</h4>
+                                    <div class="status-badge available">Available</div>
+                                    <p>OR Ready: 24/7</p>
+                                </div>
+                            </div>
+                            <div class="dept-status-card">
+                                <div class="dept-icon">💊</div>
+                                <div class="dept-info">
+                                    <h4>Emergency Pharmacy</h4>
+                                    <div class="status-badge available">Open</div>
+                                    <p>24/7 Medicine Supply</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Emergency Guidelines -->
+                    <div class="emergency-guidelines">
+                        <h3>Emergency Guidelines</h3>
+                        <div class="guidelines-grid">
+                            <div class="guideline-card">
+                                <div class="guideline-icon">🚨</div>
+                                <h4>Life Threatening</h4>
+                                <ul>
+                                    <li>Chest pain</li>
+                                    <li>Difficulty breathing</li>
+                                    <li>Severe bleeding</li>
+                                    <li>Unconsciousness</li>
+                                </ul>
+                                <p><strong>Action:</strong> Call 1911 immediately</p>
+                            </div>
+                            <div class="guideline-card">
+                                <div class="guideline-icon">⚠️</div>
+                                <h4>Urgent</h4>
+                                <ul>
+                                    <li>Severe pain</li>
+                                    <li>High fever</li>
+                                    <li>Fractures</li>
+                                    <li>Severe vomiting</li>
+                                </ul>
+                                <p><strong>Action:</strong> Use priority booking</p>
+                            </div>
+                            <div class="guideline-card">
+                                <div class="guideline-icon">ℹ️</div>
+                                <h4>Non-Urgent</h4>
+                                <ul>
+                                    <li>Minor injuries</li>
+                                    <li>Cold symptoms</li>
+                                    <li>Routine follow-up</li>
+                                    <li>Prescription refills</li>
+                                </ul>
+                                <p><strong>Action:</strong> Use regular booking</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CSD Canteen Section -->
+        <section id="csd-canteen" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h1>🛒 CSD Canteen</h1>
+                    <p>Item availability and purchase management for military personnel</p>
+                </div>
+
+                <div class="canteen-container">
+                    <!-- Canteen Status -->
+                    <div class="canteen-status">
+                        <div class="status-grid">
+                            <div class="status-item">
+                                <div class="status-icon">🕒</div>
+                                <div class="status-info">
+                                    <h4>Operating Hours</h4>
+                                    <p>09:00 AM - 08:00 PM</p>
+                                </div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-icon">📦</div>
+                                <div class="status-info">
+                                    <h4>Stock Status</h4>
+                                    <p>Updated 5 mins ago</p>
+                                </div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-icon">💰</div>
+                                <div class="status-info">
+                                    <h4>Current Offers</h4>
+                                    <p>15% off Electronics</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category Navigation -->
+                    <div class="category-nav">
+                        <button class="category-btn active" onclick="showCategory('groceries')">🥫 Groceries</button>
+                        <button class="category-btn" onclick="showCategory('electronics')">📱 Electronics</button>
+                        <button class="category-btn" onclick="showCategory('clothing')">👕 Clothing</button>
+                        <button class="category-btn" onclick="showCategory('household')">🏠 Household</button>
+                        <button class="category-btn" onclick="showCategory('personal')">🧴 Personal Care</button>
+                    </div>
+
+                    <!-- Product Categories -->
+                    <div class="product-category active" id="groceries">
+                        <h3>Groceries & Food Items</h3>
+                        <div class="products-grid">
+                            <div class="product-card">
+                                <div class="product-image">🌾</div>
+                                <div class="product-info">
+                                    <h4>Wheat Flour (5kg)</h4>
+                                    <div class="product-price">
+                                        <span class="current-price">₹180</span>
+                                        <span class="market-price">₹220</span>
+                                    </div>
+                                    <div class="stock-status in-stock">✅ In Stock</div>
+                                    <div class="quota-info">Quota: 2 per month</div>
+                                </div>
+                                <button class="btn btn-primary btn-small">Add to Cart</button>
+                            </div>
+                            <div class="product-card">
+                                <div class="product-image">🍚</div>
+                                <div class="product-info">
+                                    <h4>Basmati Rice (5kg)</h4>
+                                    <div class="product-price">
+                                        <span class="current-price">₹350</span>
+                                        <span class="market-price">₹450</span>
+                                    </div>
+                                    <div class="stock-status in-stock">✅ In Stock</div>
+                                    <div class="quota-info">Quota: 3 per month</div>
+                                </div>
+                                <button class="btn btn-primary btn-small">Add to Cart</button>
+                            </div>
+                            <div class="product-card">
+                                <div class="product-image">🥛</div>
+                                <div class="product-info">
+                                    <h4>Milk Powder (1kg)</h4>
+                                    <div class="product-price">
+                                        <span class="current-price">₹420</span>
+                                        <span class="market-price">₹520</span>
+                                    </div>
+                                    <div class="stock-status limited">⚠️ Limited Stock</div>
+                                    <div class="quota-info">Quota: 1 per month</div>
+                                </div>
+                                <button class="btn btn-primary btn-small">Add to Cart</button>
+                            </div>
+                            <div class="product-card">
+                                <div class="product-image">🛢️</div>
+                                <div class="product-info">
+                                    <h4>Cooking Oil (1L)</h4>
+                                    <div class="product-price">
+                                        <span class="current-price">₹120</span>
+                                        <span class="market-price">₹150</span>
+                                    </div>
+                                    <div class="stock-status out-stock">❌ Out of Stock</div>
+                                    <div class="quota-info">Quota: 4 per month</div>
+                                </div>
+                                <button class="btn btn-secondary btn-small" disabled>Notify When Available</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-category" id="electronics" style="display: none;">
+                        <h3>Electronics & Appliances</h3>
+                        <div class="products-grid">
+                            <div class="product-card">
+                                <div class="product-image">📱</div>
+                                <div class="product-info">
+                                    <h4>Smartphone</h4>
+                                    <div class="product-price">
+                                        <span class="current-price">₹12,000</span>
+                                        <span class="market-price">₹15,000</span>
+                                    </div>
+                                    <div class="stock-status in-stock">✅ In Stock</div>
+                                    <div class="quota-info">Quota: 1 per year</div>
+                                </div>
+                                <button class="btn btn-primary btn-small">Add to Cart</button>
+                            </div>
+                            <div class="product-card">
+                                <div class="product-image">💻</div>
+                                <div class="product-info">
+                                    <h4>Laptop</h4>
+                                    <div class="product-price">
+                                        <span class="current-price">₹35,000</span>
+                                        <span class="market-price">₹42,000</span>
+                                    </div>
+                                    <div class="stock-status limited">⚠️ Limited Stock</div>
+                                    <div class="quota-info">Quota: 1 per 2 years</div>
+                                </div>
+                                <button class="btn btn-primary btn-small">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shopping Cart -->
+                    <div class="shopping-cart">
+                        <h3>🛍️ Your Cart</h3>
+                        <div class="cart-items" id="cart-items">
+                            <p class="empty-cart">Your cart is empty</p>
+                        </div>
+                        <div class="cart-summary" id="cart-summary" style="display: none;">
+                            <div class="summary-row">
+                                <span>Subtotal:</span>
+                                <span id="cart-subtotal">₹0</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>CSD Discount:</span>
+                                <span id="cart-discount">-₹0</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Total:</span>
+                                <span id="cart-total">₹0</span>
+                            </div>
+                            <button class="btn btn-primary">Proceed to Checkout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <div class="shield-logo">🛡️</div>
+                        <div>
+                            <h3>Sainik Shifa Setu</h3>
+                            <p>Digital Health Bridge for Soldiers</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#token-booking">Token Booking</a></li>
+                        <li><a href="#card-renewal">Card Renewal</a></li>
+                        <li><a href="#emergency">Emergency</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li>📞 Emergency: 1911</li>
+                        <li>📧 hospital@army.gov.in</li>
+                        <li>📍 Military Hospital, New Delhi</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Hours</h4>
+                    <ul>
+                        <li>OPD: 08:00 AM - 06:00 PM</li>
+                        <li>Emergency: 24/7</li>
+                        <li>Pharmacy: 24/7</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Indian Army. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
